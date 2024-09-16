@@ -1,0 +1,95 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package DAO;
+
+import Entidad.Pabellon;
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.SQLException;
+import javax.swing.JTable;
+
+/**
+ *
+ * @author josda
+ */
+public class PabellonDAO {
+
+    private String mensaje = "";
+
+    public String agregarPabellon(Connection con, Pabellon pb) throws SQLException {
+
+        String sql = "{CALL SP_Insertar_Pabellon(?, ?)}";
+
+        CallableStatement call = con.prepareCall(sql);
+
+        try {
+
+            call.setInt(1, pb.getID_PABELLON());
+            call.setString(2, pb.getDESCRIPCION());
+
+            mensaje = "Agregado de manera correcta";
+            call.execute();
+            call.close();
+            con.close();
+
+        } catch (SQLException e) {
+
+            mensaje = "No se pudo realizar \n" + e.getMessage();
+
+        }
+
+        return mensaje;
+    }
+
+    public String ModificarPabellon(Connection con, Pabellon pb) throws SQLException {
+
+        String sql = "{CALL SP_Actualizar_Pabellon( ?, ?)}";
+
+        CallableStatement call = con.prepareCall(sql);
+
+        try {
+
+            call.setInt(1, pb.getID_PABELLON());
+            call.setString(2, pb.getDESCRIPCION());
+            mensaje = "Actualizado de manera correcta";
+
+            call.execute();
+            call.close();
+            con.close();
+
+        } catch (SQLException e) {
+
+            mensaje = "No se pudo realizar \n" + e.getMessage();
+
+        }
+        return mensaje;
+    }
+
+    public String eliminarPabellon(Connection con, int ID_C) throws SQLException {
+
+        String sql = "{CALL SP_Eliminar_Pabellon(?)}";
+
+        CallableStatement call = con.prepareCall(sql);
+
+        try {
+
+            call.setInt(1, ID_C);
+            call.execute();
+            call.close();
+            con.close();
+
+            mensaje = "Eliminado de manera correcta";
+
+        } catch (SQLException e) {
+
+            mensaje = "No se pudo realizar \n" + e.getMessage();
+
+        }
+        return mensaje;
+    }
+
+  
+
+}
